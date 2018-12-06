@@ -6,16 +6,22 @@ import java.util.*;
  */
 public class FracCalc {
 
-    public static void main(String[] args) {
-    	Scanner console = new Scanner(System.in);
-    	System.out.print("Enter your fractions, and we will calculate the answer: ");
-    	String expression = console.next();
-    	while(!expression.equals("quit")) {
-    	produceAnswer(expression);
-    	System.out.println("Answer: " + expression);
-    	}
-    	console.close();
-    }
+	public static void main(String[] args) {
+		//Creates scanner object
+    		Scanner sc = new Scanner(System.in);
+	    
+    		//Asks for input, continues to ask and print the answer until 'quit' is entered
+    		System.out.print("Enter your values and we will calculate the answer: ");
+	   	String input = sc.nextLine();
+	   	while(!input.equals("quit")) {
+	   		//Calls produceAnswer to obtain the answer to the problem and print it out
+	   		System.out.println("Answer: " + produceAnswer(input));
+	   		System.out.print("Next expression (type \"quit\" to stop): ");
+	   		input = sc.nextLine();
+	   	}
+	    sc.close();
+	 
+	}
     // This function takes a String 'input' and produces the result
     //
     // input is a fraction string that needs to be evaluated.  For your program, this will be the user input.
@@ -63,75 +69,76 @@ public class FracCalc {
 				return intFrac;
 		}
 		
-		//THESE METHODS ARE REDUNDANT; WILL WORK ON IT TO BE MORE EFFICIENT
+		//OPERATOR METHODS
 		
 		//adds the two operands together
-		public static int[] add(int[] intFrac, int[] intFrac2) {
-			int [] answer = new int[3];
-			toImproper(intFrac);
-			toImproper(intFrac2);
-			answer[1] = (intFrac[1]*intFrac2[2]) + (intFrac2[1]*intFrac[2]);
-			answer[2] = intFrac[2] * intFrac2[2];
-			return answer;
-		}
+					public static int[] add(int[] intFrac, int[] intFrac2) {
+						int [] answer = new int[3];
+							toImproper(intFrac);
+								toImproper(intFrac2);
+									answer[1] = (intFrac[1]*intFrac2[2]) + (intFrac2[1]*intFrac[2]);
+									answer[2] = intFrac[2] * intFrac2[2];
+									return answer;
+					}
 		
 		//this method subtracts the two methods
-		public static int[] subtract(int[] intFrac, int[] intFrac2) {
-			int [] answer = new int[3];
-			toImproper(intFrac);
-			toImproper(intFrac2);
-			answer[1] = (intFrac[1]*intFrac2[2]) - (intFrac2[1]*intFrac[2]);
-			answer[2] = intFrac[2] * intFrac2[2];
-			return answer;
-		}
+					public static int[] subtract(int[] intFrac, int[] intFrac2) {
+							int [] answer = new int[3];
+								toImproper(intFrac);
+								toImproper(intFrac2);
+								answer[1] = (intFrac[1]*intFrac2[2]) - (intFrac2[1]*intFrac[2]);
+								answer[2] = intFrac[2] * intFrac2[2];
+								return answer;
+					}
 		//this method multiplies the expressions together
-		public static int[] multiply(int[] intFrac, int[] intFrac2) {
-			int [] answer = new int[3];
-			toImproper(intFrac);
-			toImproper(intFrac2);
-			answer[1] = (intFrac[1]*intFrac2[1]);
-			answer[2] = (intFrac[2]*intFrac2[2]);
-			return answer;
-		}
+					public static int[] multiply(int[] intFrac, int[] intFrac2) {
+						int [] answer = new int[3];
+						toImproper(intFrac);
+						toImproper(intFrac2);
+						answer[1] = (intFrac[1]*intFrac2[1]);
+						answer[2] = (intFrac[2]*intFrac2[2]);
+						return answer;
+					}
 		//this method divides the expressions
-		public static int[] divide(int[] intFrac, int[] intFrac2) {
-			int [] answer = new int[3];
-			toImproper(intFrac);
-			toImproper(intFrac2);
-			answer[1] = (intFrac[1]*intFrac2[2]);
-			answer[2] = (intFrac[2]*intFrac2[1]);
-			if(answer[2] < 0) {
-				answer[1] = -answer[1];
-				answer[2] = absValue(answer[2]);
-			}
-			return answer;
-		}
-		
+					public static int[] divide(int[] intFrac, int[] intFrac2) {
+						int [] answer = new int[3];
+						toImproper(intFrac);
+						toImproper(intFrac2);
+						answer[1] = (intFrac[1]*intFrac2[2]);
+						answer[2] = (intFrac[2]*intFrac2[1]);
+						if(answer[2] < 0) {
+							answer[1] = -answer[1];
+							answer[2] = Math.abs(answer[2]);
+						}
+						return answer;
+					}
+					
 		
 		//after going through the operators, this method simplifies the result produced by the operator methods
-		public static String operate(int[] result) {
+							public static String operate(int[] result) {
 			
-			int gcf = gcf(absValue(result[1]),absValue(result[2]));
+										int gcf = gcf(Math.abs(result[1]),Math.abs(result[2]));
 			
-			if(gcf >= 1 && absValue(result[1])%absValue(result[2]) != 0 && absValue(result[1]) > absValue(result[2])) {
-				result[2] = result[2] / gcf;
-				result[1] = result[1] / gcf;
-				return toMixedNum(result[1],result[2]);
-			}
-			else if(absValue(result[1])%absValue(result[2]) == 0) {
-				return "" + result[1]/result[2] + "";
-			}
-			else if(result[2] == 1) {
-				return "" + result[1] + "";
-			}
-			else {
-				return result[1]/gcf + "/" + result[2]/gcf;
-			}
+										if(gcf >= 1 && Math.abs(result[1])%Math.abs(result[2]) != 0 && Math.abs(result[1]) > Math.abs(result[2])) {
+											result[2] = result[2] / gcf;
+											result[1] = result[1] / gcf;
+											return toMixedNum(result[1],result[2]);
+										}
+										else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
+											return "" + result[1]/result[2] + "";
+										}
+										else if(result[2] == 1) {
+											return "" + result[1] + "";
+										}	
+										else {
+											return result[1]/gcf + "/" + result[2]/gcf;
+										}
 			
-		}
+							}
+		
 		//returns the improper fraction of a fraction if it's mixed
 		public static void toImproper(int[] fraction) {
-			fraction[1] = fraction[1] + fraction[2] * absValue(fraction[0]);
+			fraction[1] = fraction[1] + fraction[2] * Math.abs(fraction[0]);
 			if(fraction[0] < 0) { //deals with negative fractions
 				fraction[1] = -fraction[1];
 			}
@@ -139,56 +146,28 @@ public class FracCalc {
 		}
 		
 		//These methods from calculate allow the operate method to simplify 
-		
-		public static boolean isDivisibleBy(int num1, int num2) {
-			boolean answer;
-			if(num1%num2== 0) {
-				if(num2 == 0) {
-					throw new IllegalArgumentException("undefined");
-				}
-				answer=true;//evenly divisible by one another
-					}else {
-					return false;
-				}
-				return answer;	
-			}
+
 		public static int gcf(int x, int y) {
 			int gcf = 0;
 			if (x>y) {
 				for (int i = y; i >= 1; i--) {
-					if(isDivisibleBy(x, i) && isDivisibleBy(y, i)) {
+					if((x%i == 0) && (y%i == 0)) {
 						return i;
 					}
 				}
 			}else {
-				   for(int j = x; j >=1; j--)
-			        {
-			            if(isDivisibleBy(x, j) && isDivisibleBy(y, j))
-			            {
+				   for(int j = x; j >=1; j--) {
+			            if((x%j == 0) && (y%j == 0)) {
 			                return j;
 			            }
 			       }
 			}
 			return gcf;
 		}	
-		public static int toWholeNum(int num1, int num2) {
-			int ans = 0;
-			if(num1%num2 == 0) {
-				ans = num1/num2;
-			}
-			return ans;
-		}
-		public static int absValue(int num) {
-			int answer = 0;
-			if(num < 0) {
-				answer= -num;//whenever the number is negative, it gets canceled out by the negative in this statement
-				}else answer= num;{//straightforward positive 
-				}
-			return answer;
-		}
+		//turns improper answer into mixed number
 		public static String toMixedNum(int numer, int denom) {
 			int newnum= numer%denom;
 			int wholenum= (numer-newnum)/denom;
-			return wholenum + "_" + absValue(newnum) + "/" + absValue(denom);
+			return wholenum + "_" + Math.abs(newnum) + "/" + Math.abs(denom);
 		} 
 	}
