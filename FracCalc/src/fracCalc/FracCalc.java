@@ -1,6 +1,6 @@
 package fracCalc;
 import java.util.*;
-/* This class will take in at least 2 values and perform at least one operation on them
+/* This class will take in at least 2 values and perform at least one mathematical operation on them
  * @author Daric Zhou
  * @version 11/19/2018
  */
@@ -127,9 +127,6 @@ public class FracCalc {
 										else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
 											return "" + result[1]/result[2] + "";
 										}
-										else if(result[2] == 1) {
-											return "" + result[1] + "";
-										}	
 										else {
 											return result[1]/gcf + "/" + result[2]/gcf;
 										}
