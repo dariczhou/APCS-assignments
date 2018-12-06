@@ -24,11 +24,8 @@ public class FracCalc {
 	}
     // This function takes a String 'input' and produces the result
     //
-    // input is a fraction string that needs to be evaluated.  For your program, this will be the user input.
+    // input is a fraction string that needs to be evaluated.  For this program, it will be the user input.
     //      e.g. input ==> "1/2 + 3/4"
-    //        
-    // The function should return the result of the fraction after it has been calculated
-    //      e.g. return ==> "1_1/4"
 	   public static String produceAnswer(String input) { 
 	    	String result = null;
 			String[] cutExpression = input.split(" ");
@@ -70,36 +67,36 @@ public class FracCalc {
 		
 		//after being parsed into integers, the array goes through the operator methods
 		//this method adds the two operands together
-					public static int[] add(int[] intFrac, int[] intFrac2) {
-						int [] answer = new int[3];
-							toImproper(intFrac);
-								toImproper(intFrac2);
-									answer[1] = (intFrac[1]*intFrac2[2]) + (intFrac2[1]*intFrac[2]);
-									answer[2] = intFrac[2] * intFrac2[2];
-									return answer;
-					}
+				public static int[] add(int[] intFrac, int[] intFrac2) {
+					int [] answer = new int[3];
+						toImproper(intFrac);
+						toImproper(intFrac2);
+						answer[1] = (intFrac[1]*intFrac2[2]) + (intFrac2[1]*intFrac[2]);
+						answer[2] = intFrac[2] * intFrac2[2];
+						return answer;
+				}
 		
 		//this method subtracts the two operands
-					public static int[] subtract(int[] intFrac, int[] intFrac2) {
-							int [] answer = new int[3];
-								toImproper(intFrac);
-								toImproper(intFrac2);
-								answer[1] = (intFrac[1]*intFrac2[2]) - (intFrac2[1]*intFrac[2]);
-								answer[2] = intFrac[2] * intFrac2[2];
-								return answer;
-					}
+				public static int[] subtract(int[] intFrac, int[] intFrac2) {
+					int [] answer = new int[3];
+						toImproper(intFrac);
+						toImproper(intFrac2);
+						answer[1] = (intFrac[1]*intFrac2[2]) - (intFrac2[1]*intFrac[2]);
+						answer[2] = intFrac[2] * intFrac2[2];
+						return answer;
+				}
 		//this method multiplies the operands together
-					public static int[] multiply(int[] intFrac, int[] intFrac2) {
-						int [] answer = new int[3];
+				public static int[] multiply(int[] intFrac, int[] intFrac2) {
+					int [] answer = new int[3];
 						toImproper(intFrac);
 						toImproper(intFrac2);
 						answer[1] = (intFrac[1]*intFrac2[1]);
 						answer[2] = (intFrac[2]*intFrac2[2]);
 						return answer;
-					}
+				}
 		//this method divides the operands
-					public static int[] divide(int[] intFrac, int[] intFrac2) {
-						int [] answer = new int[3];
+				public static int[] divide(int[] intFrac, int[] intFrac2) {
+					int [] answer = new int[3];
 						toImproper(intFrac);
 						toImproper(intFrac2);
 						answer[1] = (intFrac[1]*intFrac2[2]);
@@ -108,23 +105,23 @@ public class FracCalc {
 							answer[1] = -answer[1];
 							answer[2] = Math.abs(answer[2]);
 						}
-						return answer;
-					}
+					return answer;
+				}
 					
 		//after going through the operators, this method simplifies the result produced by the operator methods
 						public static String operate(int[] result) {
 			
-									int gcf = gcf(Math.abs(result[1]),Math.abs(result[2]));
+								int gcf = gcf(Math.abs(result[1]),Math.abs(result[2])); 
 			
-									if(gcf >= 1 && Math.abs(result[1])%Math.abs(result[2]) != 0 && Math.abs(result[1]) > Math.abs(result[2])) {
-										return toMixedNum(result[1]/gcf,result[2]/gcf);
-									}
-									else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
-										return "" + result[1]/result[2] + "";
-									}
-									else {
-										return result[1]/gcf + "/" + result[2]/gcf;
-									}
+								if(gcf >= 1 && Math.abs(result[1])%Math.abs(result[2]) != 0 && Math.abs(result[1]) > Math.abs(result[2])) {
+									return toMixedNum(result[1]/gcf,result[2]/gcf);
+								}
+								else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
+									return "" + result[1]/result[2] + "";
+								}
+								else {
+									return result[1]/gcf + "/" + result[2]/gcf;
+								}
 						}
 		
 		//returns the improper fraction of a fraction if it's mixed
@@ -137,6 +134,7 @@ public class FracCalc {
 		}
 		 
 		//These methods from calculate allow the operate method to work
+		//In the case of FracCalc, gcf can be employed to reduce fractions in operate
 		public static int gcf(int x, int y) {
 			int gcf = 0;
 			if (x>y) {
@@ -154,7 +152,7 @@ public class FracCalc {
 			}
 			return gcf;
 		}	
-		//turns improper answer into mixed number
+		//turns an improper answer into a mixed number
 		public static String toMixedNum(int numer, int denom) {
 			int newnum= numer%denom;
 			int wholenum= (numer-newnum)/denom;
