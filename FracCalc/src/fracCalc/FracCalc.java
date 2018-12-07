@@ -27,24 +27,39 @@ public class FracCalc {
     // input is a fraction string that needs to be evaluated.  For this program, it will be the user input.
     //      e.g. input ==> "1/2 + 3/4"
 	   public static String produceAnswer(String input) { 
-	    	String result = null;
-			String[] cutExpression = input.split(" ");
-			if(cutExpression[1].contains("+")) {
-				result = operate(add(toRealFrac(cutExpression[0]),toRealFrac(cutExpression[2])));
+   		   
+		   String[] cutExpression = input.split(" ");
+		   
+		   //Creates arrays of multiple operands and operators
+		   String[] operands = new String[round(cutExpression.length/2 + 0.5)+1];
+		   String[] operators = new String[round(cutExpression.length/2 + 0.5)];
+		   
+		   //Valid expressions for the scanner to take in
+		   char[] allowedOperands = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_', '/'};
+		   char[] allowedOperators = {'+', '-', '*', '/'}; 
+		   
+		   String result = null;
+			for(int i = 0; i < cutExpression.length; i++) {
+				if(i % 2 == 0) {
+					if(checkIfValid(cutExpression[i], allowedOperands)) { 
+						operator(cutExpression[i+1], toRealFrac(cutExpression[i]));
+						result = ;
+					}	
+					else {
+						return "ERROR: Input is in an invalid format";
+					}
+				}
+				else {
+					if(checkIfValid(cutExpression[i], allowedOperators) && cutExpression[i].split("").length < 2) {
+						operators[i/2] = cutExpression[i];
+					}
+					else {
+						return "ERROR: \"" + cutExpression[i] + "\" is not a valid format" ;
+					}
+				}
 			}
-			else if(cutExpression[1].contains("-")) {
-				result = operate(subtract(toRealFrac(cutExpression[0]),toRealFrac(cutExpression[2])));
-			}
-			else if(cutExpression[1].contains("*")) {		
-				result = operate(multiply(toRealFrac(cutExpression[0]),toRealFrac(cutExpression[2])));
-			}
-			else if(cutExpression[1].contains("/")) {		
-				result = operate(divide(toRealFrac(cutExpression[0]),toRealFrac(cutExpression[2])));
-			}
-			return result;
-		}
-	    
-	    //parses the operands into integers so that math operations may take place properly
+		
+	   }
 		public static int[] toRealFrac(String operand) {
 			int[] intFrac = {0, 0, 1};
 				if(operand.contains("_")) {
@@ -64,66 +79,6 @@ public class FracCalc {
 				}
 				return intFrac;
 		}
-		
-		//after being parsed into integers, the array goes through the operator methods
-		//this method adds the two operands together
-				public static int[] add(int[] intFrac, int[] intFrac2) {
-					int [] answer = new int[3];
-						toImproper(intFrac);
-						toImproper(intFrac2);
-						answer[1] = (intFrac[1]*intFrac2[2]) + (intFrac2[1]*intFrac[2]);
-						answer[2] = intFrac[2] * intFrac2[2];
-						return answer;
-				}
-		
-		//this method subtracts the two operands
-				public static int[] subtract(int[] intFrac, int[] intFrac2) {
-					int [] answer = new int[3];
-						toImproper(intFrac);
-						toImproper(intFrac2);
-						answer[1] = (intFrac[1]*intFrac2[2]) - (intFrac2[1]*intFrac[2]);
-						answer[2] = intFrac[2] * intFrac2[2];
-						return answer;
-				}
-		//this method multiplies the operands together
-				public static int[] multiply(int[] intFrac, int[] intFrac2) {
-					int [] answer = new int[3];
-						toImproper(intFrac);
-						toImproper(intFrac2);
-						answer[1] = (intFrac[1]*intFrac2[1]);
-						answer[2] = (intFrac[2]*intFrac2[2]);
-						return answer;
-				}
-		//this method divides the operands
-				public static int[] divide(int[] intFrac, int[] intFrac2) {
-					int [] answer = new int[3];
-						toImproper(intFrac);
-						toImproper(intFrac2);
-						answer[1] = (intFrac[1]*intFrac2[2]);
-						answer[2] = (intFrac[2]*intFrac2[1]);
-						if(answer[2] < 0) {
-							answer[1] = -answer[1];
-							answer[2] = Math.abs(answer[2]);
-						}
-					return answer;
-				}
-					
-		//after going through the operators, this method simplifies the result produced by the operator methods
-						public static String operate(int[] result) {
-			
-								int gcf = gcf(Math.abs(result[1]),Math.abs(result[2])); 
-			
-								if(gcf >= 1 && Math.abs(result[1])%Math.abs(result[2]) != 0 && Math.abs(result[1]) > Math.abs(result[2])) {
-									return toMixedNum(result[1]/gcf,result[2]/gcf);
-								}
-								else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
-									return "" + result[1]/result[2] + "";
-								}
-								else {
-									return result[1]/gcf + "/" + result[2]/gcf;
-								}
-						}
-		
 		//returns the improper fraction of a fraction if it's mixed
 		public static void toImproper(int[] fraction) {
 			fraction[1] = fraction[1] + fraction[2] * Math.abs(fraction[0]);
@@ -132,30 +87,86 @@ public class FracCalc {
 			}
 			fraction[0] = 0;
 		}
-		 
-		//These methods from calculate allow the operate method to work
-		//In the case of FracCalc, gcf can be employed to reduce fractions in operate
-		public static int gcf(int x, int y) {
-			int gcf = 0;
-			if (x>y) {
-				for (int i = y; i >= 1; i--) {
-					if((x%i == 0) && (y%i == 0)) {
-						return i;
-					}
+		//This method executes the expression entered through the operators and operand
+			public static int[] operator(String operator, int[] operand) {
+				toImproper(operand);
+				if(operator.equals("+")) {
+					
 				}
-			}else {
-				   for(int j = x; j >=1; j--) {
-			            if((x%j == 0) && (y%j == 0)) {
-			                return j;
-			            }
-			       }
 			}
-			return gcf;
-		}	
-		//turns an improper answer into a mixed number
-		public static String toMixedNum(int numer, int denom) {
-			int newnum= numer%denom;
-			int wholenum= (numer-newnum)/denom;
-			return wholenum + "_" + Math.abs(newnum) + "/" + Math.abs(denom);
-		} 
+
+				//after going through the operators, this method simplifies the result produced by the operator methods
+			public static String toReducedFrac(int[] result) {
+
+					int gcf = gcf(Math.abs(result[1]),Math.abs(result[2])); 
+
+					if(gcf >= 1 && Math.abs(result[1])%Math.abs(result[2]) != 0 && Math.abs(result[1]) > Math.abs(result[2])) {
+						return toMixedNum(result[1]/gcf,result[2]/gcf);
+					}
+					else if(Math.abs(result[1])%Math.abs(result[2]) == 0) {
+						return "" + result[1]/result[2] + "";
+					}
+					else {
+						return result[1]/gcf + "/" + result[2]/gcf;
+					}
+			}
+			//These methods from calculate allow the operate method to work
+			//In the case of FracCalc, gcf can be employed to reduce fractions in operate
+			public static int gcf(int x, int y) {
+				int gcf = 0;
+				if (x>y) {
+					for (int i = y; i >= 1; i--) {
+						if((x%i == 0) && (y%i == 0)) {
+							return i;
+						}
+					}
+				}else {
+					   for(int j = x; j >=1; j--) {
+				            if((x%j == 0) && (y%j == 0)) {
+				                return j;
+				            }
+				       }
+				}
+				return gcf;
+			}	
+			//turns an improper answer into a mixed number
+			public static String toMixedNum(int numer, int denom) {
+				int newnum= numer%denom;
+				int wholenum= (numer-newnum)/denom;
+				return wholenum + "_" + Math.abs(newnum) + "/" + Math.abs(denom);
+			} 
+		
 	}
+
+
+
+	   //This function checks if the operator entered is valid based off the given String array(EC)
+		public static boolean checkIfValid(String check, char[] expression) {
+			char[] str = check.toCharArray();
+			for(char c : str) {
+				if(!contains(expression, c)) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		//Returns if the target char is contained within an array 
+		public static boolean contains(char[] arr, char target) {
+	    	for(char curChar : arr) {
+	    		if(curChar == target) {
+	    			return true;
+	    		} 
+	    	}	
+	    	return false;
+	    }
+		//This method solves the fencepost problem when declaring the arrays for the expressions
+		public static int round(double n) {
+			return (int)(n +  0.5);
+		}
+}
+		
+
+
+		
+		
