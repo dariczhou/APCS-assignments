@@ -45,30 +45,22 @@ public class Fraction {
 	public static Fraction add(Fraction x, Fraction y) {
 		x = Fraction.toImproperFrac(x);
 		y = Fraction.toImproperFrac(y);
+		int denom = x.getDenom()*y.getDenom();
+		int numer = x.getSign()*x.getNumer()*y.getDenom() + y.getSign()*y.getNumer()*x.getDenom();
+		int sign = numer > 0 ? 1 : -1;
 		
-		int a_num = x.getNumer()*y.getDenom();
-		int b_num = y.getNumer()*x.getDenom();
-		int den = x.getDenom()*y.getDenom();
-
-		int r_num = x.getSign()*a_num + y.getSign()*b_num;
-		int sign = r_num > 0 ? 1 : -1;
-		
-		return new Fraction(sign, 0, Math.abs(r_num), den);
+		return new Fraction(sign, 0, absValue(numer), denom);
 		
 	}
 	//subtracts two operands to make a difference
 	public static Fraction subtract(Fraction x, Fraction y) {
 		x = Fraction.toImproperFrac(x);
-		y = Fraction.toImproperFrac(y);
+		y = Fraction.toImproperFrac(y);	
+		int denom = x.getDenom()*y.getDenom();
+		int numer = x.getSign()*x.getNumer()*y.getDenom() - y.getSign()*y.getNumer()*x.getDenom();
+		int sign = numer > 0 ? 1 : -1;
 		
-		int a_num = x.getNumer()*y.getDenom();
-		int b_num = y.getNumer()*x.getDenom();
-		int den = x.getDenom()*y.getDenom();
-
-		int r_num = x.getSign()*a_num - y.getSign()*b_num;
-		int sign = r_num > 0 ? 1 : -1;
-		
-		return new Fraction(sign, 0, Math.abs(r_num), den);
+		return new Fraction(sign, 0, Math.abs(numer), denom);
 	}
 	//multiplies two operands to make a product
 	public static Fraction multiply(Fraction x, Fraction y) {
