@@ -1,6 +1,9 @@
 package fracCalc;
 import java.util.Scanner;
-
+/* This class, using objects, will take in at least 2 values and perform at least one mathematical operation on them
+ * @author Daric Zhou
+ * @version 1/19/2019
+ */
 public class FracCalc {
 
 	public static void main(String[] args) {
@@ -19,6 +22,7 @@ public class FracCalc {
 	    sc.close();
 	 
 	}
+	 // This function takes a String 'input' and produces the result
     public static String produceAnswer(String input)
     { 
     	String[] cutExpression = input.split(" ");
