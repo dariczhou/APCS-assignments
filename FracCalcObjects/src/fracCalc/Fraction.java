@@ -13,6 +13,7 @@ public class Fraction {
 		this.denom = denominator;
 		
 	}
+	//Constructor that converts String element into an integer fraction
 	public Fraction(String cutExpression) {
 		this.whole = 0;
 		this.numer = 0; //initial initialization
