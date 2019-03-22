@@ -1,16 +1,33 @@
+
 package textExcel;
 
-public class TextCell implements Cell{
+// cell that holds text
+public class TextCell implements Cell {
 	private String text;
-	// text for spreadsheet cell display, must be exactly length 10
-	public TextCell(String input) {
-		text = input;
+	
+	public TextCell(String t) {
+		text = t;
 	}
+	
+	// returns the value displayed on the grid
 	public String abbreviatedCellText() {
-		return text.substring(0, 10);
+		String abrvText = text;
+		if (text.contains("\"")) {
+			abrvText = text.substring(1, text.length()-1);
+		}
+		if (abrvText.length() > 10) {
+			return abrvText.substring(0, 10);
+		} else {
+			String numSpaces = "";
+			for (int i = 0; i < 10 - abrvText.length(); i++) {
+				numSpaces += " ";
+			}
+			return abrvText + numSpaces;
+		}
 	}
-	// text for individual cell inspection, not truncated or padded
+	
+	// returns the actual value
 	public String fullCellText() {
-		return "\"" + text + "\"";
+		return text;
 	}
 }

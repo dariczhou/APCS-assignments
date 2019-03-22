@@ -1,33 +1,25 @@
+
 package textExcel;
 
-//Update this file with your own code.
+// Creates a SpreadsheetLocation that holds the row and column of a cell's location
 
 public class SpreadsheetLocation implements Location
 {
-	private int row;
-	private int column;
-	//constructor
+	private String cellName;
     public SpreadsheetLocation(String cellName)
     {
-        // TODO: Fill this out with your own code
-    	cellName = cellName.toUpperCase();
-    	column = cellName.charAt(0);
-    	row = Integer.parseInt(cellName.substring(1));
+    		
+        this.cellName = cellName.toUpperCase();
     }
-    @Override // gets row of this location
+	@Override
     public int getRow()
     {
-        // TODO Auto-generated method stub
-        return row - 1;
+		return Integer.parseInt(cellName.substring(1)) - 1;     
     }
 
-    @Override // gets column of this location
+    @Override
     public int getCol()
     {
-        // TODO Auto-generated method stub
-    	
-        return column - 65;
+    		return cellName.charAt(0) - 'A';
     }
-    
-
 }
