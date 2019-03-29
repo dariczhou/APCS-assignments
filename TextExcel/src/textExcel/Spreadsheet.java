@@ -18,43 +18,49 @@ public class Spreadsheet implements Grid
 	@Override // processes a user command, returns string to display, must be called in loop from main
 	public String processCommand(String command)
 	{
-		String result = "";
-		if (command.equals("")) {
-			// does nothing in case of empty string being passed in 
-		// clears either the entire grid or a single cell
-		} else if (command.split(" ", 2)[0].toLowerCase().equals("clear")) {
-			if (command.contains(" ")) {
-				String cellName = command.split(" ")[1];
-				SpreadsheetLocation cell = new SpreadsheetLocation(cellName);
-				sheet[cell.getRow()][cell.getCol()] = new EmptyCell();
-				result = getGridText();
-			} else {
-				for (int i = 0; i < numRows; i++) {
-					for (char j = 0; j < numColumns; j++) {
-					sheet[i][j] = new EmptyCell();
-					}
-				}
-				result = getGridText();
-			}
-		// input entered is a cell location
-		} else if (Character.isLetter(command.charAt(0)) && Character.isDigit(command.charAt(1))) {
-			String cellName = command.split(" ", 3)[0];
-			SpreadsheetLocation cell = new SpreadsheetLocation(cellName);
-			if (command.contains("=")) {
-				String value = command.split(" ", 3)[2];
-				Cell target = sheet[cell.getRow()][cell.getCol()];
-				// determines whether the cell contains text (TextCell or FormulaCell) or numbers (RealCell)
-				target = new TextCell(value);
-				result = getGridText();
-			} else {
-				result = sheet[cell.getRow()][cell.getCol()].fullCellText();
-			}
+		if(command.indexOf('=') != -1) { // If assign cell
+			
+			Cell cell;
+			
+			String[] split = command.split("=", 2);
+			//split[0] is the cell location and split[1] is the assignment statement
+			SpreadsheetLocation l = new SpreadsheetLocation(split[0].replaceAll("\\s+", ""));
+			
+			//Assigning a TextCell
+			if(split[1].indexOf("\"") != -1 && split[1].lastIndexOf("\"") != -1) {
+				cell = new TextCell(split[1].substring(split[1].indexOf("\"")+1, split[1].lastIndexOf("\"")));
+				
+			//Assigning a FormulaCell
+			} else if(split[1].indexOf("(") < split[1].indexOf(")")) { 
+				String formula = split[1].substring(split[1].indexOf("(")+1, split[1].lastIndexOf(")"));
+				cell = new FormulaCell(formula.replaceAll("\\s+", ""));
+				
+			//Assigning a PercentCell
+			} else if(split[1].indexOf("%") != -1){ 
+				String percent = Double.parseDouble((split[1].replaceAll("%", "")))/100 + "";
+				cell = new PercentCell(percent);
+				
+			//Assigning a ValueCell
+			} else cell = new ValueCell(split[1].replaceAll("%", ""));
+			setCell(l, cell);
+				
 		} else {
-			System.out.println("Unknown command. Type 'quit' to exit the program.");
+			if(command.toLowerCase().indexOf("clear") != -1) {
+				if(command.equalsIgnoreCase("clear")) {
+					//Clears all cells
+					clearCells();
+				} else {
+					//Clears a single cell;
+					String s = command.toLowerCase().replaceAll("clear", "");
+					setCell(new SpreadsheetLocation(s.replaceAll("\\s+", "")), new EmptyCell());
+				}
+			} else {
+				//Inspect cells
+				return getCell(new SpreadsheetLocation(command)).fullCellText();
+			}
 		}
-		return result;
+		return getGridText();
 	}
-
 	@Override
 	public int getRows()
 	{
@@ -72,35 +78,34 @@ public class Spreadsheet implements Grid
 	{
 		return sheet[loc.getRow()][loc.getCol()];
 	}
-
+	public void setCell(Location loc, Cell cell) {
+		sheet[loc.getRow()][loc.getCol()] = cell;
+	}
 	@Override
-	public String getGridText()
-	{
-		String grid = "   ";
-	    	for(int col = 65; col < 77; col++) {
-	    		grid += "|" + (char)(col) + "         ";
-	    	}
-	    	grid += "|";
-	    	for(int row = 1; row <= 9; row++) {
-	    		grid += "\n  " + row;
-	    		for(int col = 1; col <= numColumns; col++) {
-	    			grid += "|          ";
-	       		}
-	    		grid += "|";
-	    	}
-	    	for(int row = 10; row <= numRows; row++) {
-	    			grid += "\n " + row;
-	    		for(int col = 1; col <= numColumns; col++) {
-	    			grid += "|          ";
-	       		}
-	    		grid += "|";
-	    	}
-	    	return grid;
-	    }
+	public String getGridText() {
+		String grid = "";
+		// first row - column header
+		String firstRow = "   |";
+		for (int i = 'A'; i <= 'L'; i++) {
+			firstRow += (char) i + "         |";
+		}
+		grid += firstRow + "\n";
+		// the rest of the rows - table of values
+		for (int i = 0; i < numRows; i++) {
+			String row = "";
+			row += String.format("%-3s", i+1) + "|";
+			for (int j = 0; j < numColumns; j++) {
+				row += sheet[i][j].abbreviatedCellText() + "|";
+			}
+			grid += row + "\n";
+		}
+		return grid;
+		}
 	public void clearCells() {
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numColumns; col++) {
-				sheet[row][col] = new EmptyCell();
+		sheet = new Cell[getRows()][getCols()];
+		for(int i = 0; i < numRows; i++) {
+			for(int j = 0; j < numColumns; j++) {
+				sheet[i][j] = new EmptyCell();
 			}
 		}
 	}
