@@ -9,11 +9,7 @@ public class Spreadsheet implements Grid
 	private Cell[][] sheet = new Cell[numRows][numColumns];
 	//constructor
 	public Spreadsheet() {
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numColumns; col++) {
-				sheet[row][col] = new EmptyCell();
-			}
-		}
+		clearCells();
 	}
 	@Override // processes a user command, returns string to display, must be called in loop from main
 	public String processCommand(String command)
@@ -32,8 +28,7 @@ public class Spreadsheet implements Grid
 				
 			//Assigning a FormulaCell
 			} else if(split[1].indexOf("(") < split[1].indexOf(")")) { 
-				String formula = split[1].substring(split[1].indexOf("(")+1, split[1].lastIndexOf(")"));
-				cell = new FormulaCell(formula.replaceAll("\\s+", ""));
+				cell = new FormulaCell(split[1].substring(split[1].indexOf("(")+2, split[1].lastIndexOf(")")-1), this);
 				
 			//Assigning a PercentCell
 			} else if(split[1].indexOf("%") != -1){ 
