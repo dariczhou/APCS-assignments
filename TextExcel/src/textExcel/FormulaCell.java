@@ -22,6 +22,7 @@ public class FormulaCell extends RealCell implements Cell{
 			ArrayList<Double> operands = new ArrayList<Double>();
 			ArrayList<Character> operators = new ArrayList<Character>();
 			if(valArr[0].equalsIgnoreCase("AVG") || valArr[0].equalsIgnoreCase("SUM")) {
+				
 			return 0.0;
 			
 			} else {
