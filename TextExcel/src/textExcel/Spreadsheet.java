@@ -1,5 +1,6 @@
 package textExcel;
-
+import java.util.ArrayList;
+import java.util.Collections;
 // Update this file with your own code.
 
 public class Spreadsheet implements Grid
@@ -36,18 +37,39 @@ public class Spreadsheet implements Grid
 				cell = new PercentCell(percent);
 				
 			//Assigning a ValueCell
-			} else cell = new ValueCell(split[1].replaceAll("%", ""));
+			} else cell = new ValueCell(split[1].replaceAll(" ", ""));
 			setCell(l, cell);
 				
 		} else {
+			//Clears cells
 			if(command.toLowerCase().indexOf("clear") != -1) {
 				if(command.equalsIgnoreCase("clear")) {
 					//Clears all cells
 					clearCells();
 				} else {
-					//Clears a single cell;
+					//Clears a single cell
 					String s = command.toLowerCase().replaceAll("clear", "");
 					setCell(new SpreadsheetLocation(s.replaceAll("\\s+", "")), new EmptyCell());
+				}
+			//Sorts the range of Cells in command
+			} else if (command.toLowerCase().contains("sort")) {
+				String range = command.split(" ")[1];
+				SpreadsheetLocation start = new SpreadsheetLocation(range.split("-")[0]);
+				SpreadsheetLocation end = new SpreadsheetLocation(range.split("-")[1]);
+				ArrayList<Cell> rangeArr = rangeBetween(start, end, this);
+				
+				ArrayList<Cell> sortedArr;
+				if(command.toLowerCase().charAt(4) == 'a') {
+					sortedArr = sort(rangeArr, true);
+				} else {
+					sortedArr = sort(rangeArr, false);
+				}
+				// Iterates through rows and columns of range
+				for(int i = start.getRow(); i <= end.getRow(); i++) {
+					for(int j = start.getCol(); j <= end.getCol(); j++) {
+						int arrayIndex = (i-start.getRow())*(end.getCol()-start.getCol()+1)+(j-start.getCol());
+						this.setCell(toSL(i, j), sortedArr.get(arrayIndex));
+					}
 				}
 			} else {
 				//Inspect cells
@@ -76,7 +98,28 @@ public class Spreadsheet implements Grid
 	public void setCell(Location loc, Cell cell) {
 		sheet[loc.getRow()][loc.getCol()] = cell;
 	}
+	// Returns all cells in a rectangular area from the upper-left to lower-right corner
+	public static ArrayList<Cell> rangeBetween(SpreadsheetLocation a, SpreadsheetLocation b, Spreadsheet s) {
+		ArrayList<Cell> range = new ArrayList<Cell>();
+		// Iterates through all the rows and columns within target range
+		for(int i = a.getRow(); i <= b.getRow(); i++) {
+			for(int j = a.getCol(); j <= b.getCol(); j++) {
+				range.add(s.getCell(toSL(i, j))); 
+			}
+		}
+
+		return range;
+			
+	}
+	// Obtains string version of cell location
+	public static SpreadsheetLocation toSL(int row, int col) {
+		char column = (char)(col+65); // Converts column number into a column letter
+		String str = String.format("%1$s%2$s", Character.toString(column), row+1);
+		
+		return new SpreadsheetLocation(str);
+	}
 	@Override
+	// prints out entire spreadsheet grid
 	public String getGridText() {
 		String grid = "";
 		// first row - column header
@@ -96,6 +139,7 @@ public class Spreadsheet implements Grid
 		}
 		return grid;
 		}
+	// resets spreadsheet
 	public void clearCells() {
 		sheet = new Cell[getRows()][getCols()];
 		for(int i = 0; i < numRows; i++) {
@@ -104,5 +148,32 @@ public class Spreadsheet implements Grid
 			}
 		}
 	}
+	//sorts array in either ascending or descending order
+	public static ArrayList<Cell> sort(ArrayList<Cell> arr, boolean ascending) {
+		ArrayList<Cell> resultantArr = (ArrayList<Cell>) arr;
+		
+		int swaps;
+		do {
+			swaps = 0;
+
+			for(int i = 1; i < resultantArr.size(); i++) {
+				if(ascending) {
+					if(resultantArr.get(i).compareTo(resultantArr.get(i-1))==-1) {
+						Collections.swap(resultantArr, i, i-1);
+						swaps++;
+					}
+				} else {
+					if(resultantArr.get(i).compareTo(resultantArr.get(i-1))==1) {
+						Collections.swap(resultantArr, i, i-1);
+						swaps++;
+					}
+				}
+			}
+		} while(swaps != 0);
+		
+		
+		return resultantArr;
+	} 
+	
 
 }

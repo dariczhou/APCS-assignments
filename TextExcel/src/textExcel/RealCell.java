@@ -19,4 +19,15 @@ public class RealCell implements Cell {
 	public double getDoubleValue() {
 		return Double.parseDouble(value);
 	}
+	public int compareTo(Object o) {
+		if(o instanceof RealCell) {
+			RealCell r = (RealCell) o;
+			if(this.getDoubleValue() == r.getDoubleValue()) {
+				return 0;
+			} else if(r.getDoubleValue() > this.getDoubleValue()){
+				return -1;
+			}
+		}
+		return 1;
+	}
 }

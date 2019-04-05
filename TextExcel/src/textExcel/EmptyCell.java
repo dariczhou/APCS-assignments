@@ -12,4 +12,10 @@ public class EmptyCell implements Cell{
 	public String fullCellText() {
 		return "";
 	}
+	@Override
+	public int compareTo(Object o) {
+		return 0;
+	}
+	
+	
 }

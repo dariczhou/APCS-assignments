@@ -17,27 +17,48 @@ public class FormulaCell extends RealCell implements Cell{
 	public String fullCellText() {
 		return "( " + super.fullCellText() + " )";
 	}
-		public double getDoubleValue() {
-			String[] valArr = super.fullCellText().split(" ");
-			ArrayList<Double> operands = new ArrayList<Double>();
-			ArrayList<Character> operators = new ArrayList<Character>();
-			if(valArr[0].equalsIgnoreCase("AVG") || valArr[0].equalsIgnoreCase("SUM")) {
+	public double getDoubleValue() {
+		String[] valArr = super.fullCellText().split(" ");
+		ArrayList<Double> operands = new ArrayList<Double>();
+		ArrayList<Character> operators = new ArrayList<Character>();
+		
+		if(valArr[0].equalsIgnoreCase("AVG") || valArr[0].equalsIgnoreCase("SUM")) {
+			String[] range = valArr[1].split("-");
+			
+			SpreadsheetLocation start = new SpreadsheetLocation(range[0]);
+			SpreadsheetLocation end = new SpreadsheetLocation(range[1]);
+			ArrayList<Cell> cellArr = Spreadsheet.rangeBetween(start, end, s);
 				
-			return 0.0;
-			
-			} else {
-				for(int i = 0; i < valArr.length; i++) {
-			
-				if(i%2 == 0) {
-					if(valArr[i].matches("([A-Za-z])[0-9]*")) {
-						operands.add(((RealCell) s.getCell(new SpreadsheetLocation(valArr[i]))).getDoubleValue());
-					} else {
-						operands.add(Double.parseDouble(valArr[i]));
-					}
-				} else {
-					operators.add(valArr[i].charAt(0));
-				}
+			// Converts cells into RealCells
+			ArrayList<RealCell> realCellArr = new ArrayList<RealCell>();
+			for(Cell c : cellArr) {
+				realCellArr.add((RealCell)c);
 			}
+			// Gets result
+			double result = 0;
+			for(int i = 0; i < realCellArr.size(); i++) {
+				result += realCellArr.get(i).getDoubleValue();
+			}
+			//returns either average or sum
+			if(valArr[0].equalsIgnoreCase("AVG")) {
+				return result/((double)realCellArr.size());
+				} else {
+				return result;
+			}
+			
+		} else {
+			for(int i = 0; i < valArr.length; i++) {
+		
+			if(i%2 == 0) {
+				if(valArr[i].matches("([A-Za-z])[0-9]*")) { //determines if the input is a cell of numeric value
+					operands.add(((RealCell) s.getCell(new SpreadsheetLocation(valArr[i]))).getDoubleValue());
+				} else {
+				operands.add(Double.parseDouble(valArr[i]));
+				}
+			} else {
+				operators.add(valArr[i].charAt(0));
+			}
+		}
 			
 			// Performs operations on formula
 			double value = operands.get(0);
