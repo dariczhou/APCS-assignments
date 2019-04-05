@@ -1,5 +1,9 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles cells that contain nothing
+ */
 public class EmptyCell implements Cell{
 	public EmptyCell() {
 		

@@ -1,5 +1,9 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles text of certain cells
+ */
 public class TextCell implements  Cell {
 	
 	private String text;

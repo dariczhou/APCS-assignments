@@ -1,5 +1,9 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This superclass handles cells that are not text (string) nor empty
+ */
 public class RealCell implements Cell {
 		
 	private String value;

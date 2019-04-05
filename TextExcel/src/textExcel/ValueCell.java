@@ -1,5 +1,9 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles double values stored by the user
+ */
 public class ValueCell extends RealCell {
 	
 	public ValueCell(String value) {

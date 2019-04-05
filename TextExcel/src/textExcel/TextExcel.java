@@ -1,5 +1,11 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * TextExcel : This project creates a lightweight version of the spreadsheet on a console window
+ * This specific class takes in inputs - cell numbers and cell content - and prints out a spreadsheet with 
+ * what the user input into the command
+ */
 import java.util.Scanner;
 
 // Update this file with your own code.

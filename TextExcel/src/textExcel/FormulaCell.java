@@ -1,4 +1,9 @@
 package textExcel;
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles formulas and equations from the client
+ */
 import java.util.ArrayList;
 
 public class FormulaCell extends RealCell implements Cell{

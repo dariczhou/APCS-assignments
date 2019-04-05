@@ -1,7 +1,11 @@
 package textExcel;
 import java.util.ArrayList;
 import java.util.Collections;
-// Update this file with your own code.
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles the creation of the spreadsheet and what's within the sheet
+ */
 
 public class Spreadsheet implements Grid
 {

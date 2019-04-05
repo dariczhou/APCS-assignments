@@ -1,5 +1,9 @@
 package textExcel;
-
+/*
+ * @author Daric Zhou
+ * @version March 2019
+ * This class handles percentages stored by the user
+ */
 public class PercentCell extends RealCell implements Cell{
 	public PercentCell(String value) {
 		super(value);
