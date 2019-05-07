@@ -26,20 +26,17 @@ public class TextCell implements  Cell {
 	public int compareTo(Object o) {
 		if(o instanceof TextCell) {
 			
-			// Casts cell to TextCell and stores values
 			TextCell t = (TextCell) o;
 			String s1 = t.fullCellText();
 			String s2 = this.fullCellText(); 
 			
-			// If the letters are equivalent, return 0
 			if(s1.equals(s2)) return 0;
 			
-			// This part of the code loops through each string to determine which comes first alphabetically
-			String shorter;
-			if(s1.length() > s2.length()) shorter = s2;
-			else shorter = s1;
+			String shorterStr;
+			if(s1.length() > s2.length()) shorterStr = s2;
+			else shorterStr = s1;
 			
-			for(int i = 0; i < shorter.length(); i++) {
+			for(int i = 0; i < shorterStr.length(); i++) {
 				if(s1.charAt(i) > s2.charAt(i)) {
 					return -1;
 				} else if (s1.charAt(i) < s2.charAt(i)) {
@@ -48,7 +45,7 @@ public class TextCell implements  Cell {
 			}
 			
 			// If Strings are identical up to the length of the shorter String, this returns based on what String is shorter
-			if(shorter.equals(s1)) {
+			if(shorterStr.equals(s1)) {
 				return -1;
 			} else return 1;
 		

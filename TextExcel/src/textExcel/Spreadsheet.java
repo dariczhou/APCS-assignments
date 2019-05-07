@@ -24,7 +24,6 @@ public class Spreadsheet implements Grid
 			Cell cell;
 			
 			String[] split = command.split("=", 2);
-			//split[0] is the cell location and split[1] is the assignment statement
 			SpreadsheetLocation l = new SpreadsheetLocation(split[0].replaceAll("\\s+", ""));
 			
 			//Assigning a TextCell
@@ -82,46 +81,7 @@ public class Spreadsheet implements Grid
 		}
 		return getGridText();
 	}
-	@Override
-	public int getRows()
-	{
-		return numRows;
-	}
 
-	@Override
-	public int getCols()
-	{
-		return numColumns;
-	}
-
-	@Override
-	public Cell getCell(Location loc)
-	{
-		return sheet[loc.getRow()][loc.getCol()];
-	}
-	public void setCell(Location loc, Cell cell) {
-		sheet[loc.getRow()][loc.getCol()] = cell;
-	}
-	// Returns all cells in a rectangular area from the upper-left to lower-right corner
-	public static ArrayList<Cell> rangeBetween(SpreadsheetLocation a, SpreadsheetLocation b, Spreadsheet s) {
-		ArrayList<Cell> range = new ArrayList<Cell>();
-		// Iterates through all the rows and columns within target range
-		for(int i = a.getRow(); i <= b.getRow(); i++) {
-			for(int j = a.getCol(); j <= b.getCol(); j++) {
-				range.add(s.getCell(toSL(i, j))); 
-			}
-		}
-
-		return range;
-			
-	}
-	// Obtains string version of cell location
-	public static SpreadsheetLocation toSL(int row, int col) {
-		char column = (char)(col+65); // Converts column number into a column letter
-		String str = String.format("%1$s%2$s", Character.toString(column), row+1);
-		
-		return new SpreadsheetLocation(str);
-	}
 	@Override
 	// prints out entire spreadsheet grid
 	public String getGridText() {
@@ -152,6 +112,27 @@ public class Spreadsheet implements Grid
 			}
 		}
 	}
+	
+	// Returns all cells in a rectangular area from the upper-left to lower-right corner
+	public static ArrayList<Cell> rangeBetween(SpreadsheetLocation a, SpreadsheetLocation b, Spreadsheet s) {
+		ArrayList<Cell> range = new ArrayList<Cell>();
+		// Iterates through all the rows and columns within target range
+		for(int i = a.getRow(); i <= b.getRow(); i++) {
+			for(int j = a.getCol(); j <= b.getCol(); j++) {
+				range.add(s.getCell(toSL(i, j))); 
+			}
+		}
+
+		return range;
+			
+	}
+	// Obtains string version of cell location
+	public static SpreadsheetLocation toSL(int row, int col) {
+		char column = (char)(col+65); // Converts column number into a column letter
+		String str = String.format("%1$s%2$s", Character.toString(column), row+1);
+		
+		return new SpreadsheetLocation(str);
+	}
 	//sorts array in either ascending or descending order
 	public static ArrayList<Cell> sort(ArrayList<Cell> arr, boolean ascending) {
 		ArrayList<Cell> resultantArr = (ArrayList<Cell>) arr;
@@ -178,6 +159,27 @@ public class Spreadsheet implements Grid
 		
 		return resultantArr;
 	} 
+	//accessors and setters
+		@Override
+		public int getRows()
+		{
+			return numRows;
+		}
+
+		@Override
+		public int getCols()
+		{
+			return numColumns;
+		}
+
+		@Override
+		public Cell getCell(Location loc)
+		{
+			return sheet[loc.getRow()][loc.getCol()];
+		}
+		public void setCell(Location loc, Cell cell) {
+			sheet[loc.getRow()][loc.getCol()] = cell;
+		}
 	
 
 }

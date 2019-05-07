@@ -26,9 +26,10 @@ public class RealCell implements Cell {
 	public int compareTo(Object o) {
 		if(o instanceof RealCell) {
 			RealCell r = (RealCell) o;
-			if(this.getDoubleValue() == r.getDoubleValue()) {
+			if(getDoubleValue() == r.getDoubleValue()) {
 				return 0;
-			} else if(r.getDoubleValue() > this.getDoubleValue()){
+			}
+			if(r.getDoubleValue() > getDoubleValue()){
 				return -1;
 			}
 		}
