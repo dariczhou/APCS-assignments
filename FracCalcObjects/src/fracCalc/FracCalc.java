@@ -27,11 +27,11 @@ public class FracCalc {
     { 
     	String[] cutExpression = input.split(" ");
     	Fraction answer = new Fraction(cutExpression[0]);
-    	//EC: evaluates the string of elements in order
+    	
     	for(int i = 2; i < cutExpression.length; i += 2) {
-    	String operator = cutExpression[i-1];
-        Fraction operand = new Fraction(cutExpression[i]);
-        answer = doMath(answer, operator, operand);
+    		String operator = cutExpression[i-1];
+    		Fraction operand = new Fraction(cutExpression[i]);
+    		answer = doMath(answer, operator, operand);
     	}
        answer.toReducedFrac();
        answer.toMixedNum();      

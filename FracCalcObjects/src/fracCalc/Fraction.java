@@ -1,12 +1,12 @@
 package fracCalc;
 
 public class Fraction {
-	private int whole;
-	private int numer;
-	private int denom;
-	private int sign;
+	
+	private int whole, numer, denom, sign;
+	
 	//Constructor that creates a Fraction from integers
 	public Fraction(int sign, int whole, int numerator, int denominator) {
+		
 		this.sign = sign;
 		this.whole = whole;
 		this.numer = numerator;
@@ -19,7 +19,8 @@ public class Fraction {
 		this.numer = 0; //initial initialization
 		this.denom = 1;
 		//changes string to integers based on the string
-			if(cutExpression.contains("_")) { //when the String is in the complete +- a_b/c fraction
+			//when the String is in the complete +- a_b/c fraction
+			if(cutExpression.contains("_")) {
 				String[] mixedNum = cutExpression.split("_");
 				String[] fraction = mixedNum[1].split("/");
 				this.whole = Integer.parseInt(mixedNum[0]);
@@ -28,7 +29,8 @@ public class Fraction {
 				this.numer = Integer.parseInt(fraction[0]);
 				this.denom = Integer.parseInt(fraction[1]);
 			}
-			else if(cutExpression.contains("/")) { //fraction strings with only a numerator and denominator
+			 //fraction strings with only a numerator and denominator
+			else if(cutExpression.contains("/")) {
 				String[] fraction = cutExpression.split("/");
 				this.numer = Integer.parseInt(fraction[0]);
 				this.sign = this.numer > 0 ? 1 : -1;
@@ -36,18 +38,33 @@ public class Fraction {
 
 				this.denom = Integer.parseInt(fraction[1]);
 			}
-			else { //if fraction is a whole number
+			//if fraction is a whole number
+			else { 
 				this.whole = Integer.parseInt(cutExpression);	
 				this.sign = this.whole > 0 ? 1 : -1;
 				this.whole = Math.abs(this.whole);
 			}
 	}
+	//returns the result of the calculation as a string
+	public String toString() {
+		if(this.numer == 0){ 
+			return this.sign*this.whole + "";
+		} else if(this.whole == 0 && this.numer!= 0){ 
+			return this.sign*this.numer+"/"+this.denom;
+		} else {
+			return this.sign*this.whole+"_"+this.numer+"/"+this.denom;
+		}
+	}
 	//adds two operands to make a sum
 	public static Fraction add(Fraction x, Fraction y) {
 		x = Fraction.toImproperFrac(x);
 		y = Fraction.toImproperFrac(y);
+		
+		int num1 = x.getNumer()*y.getDenom();
+		int num2 = y.getNumer()*x.getDenom();
 		int denom = x.getDenom()*y.getDenom();
-		int numer = x.getSign()*x.getNumer()*y.getDenom() + y.getSign()*y.getNumer()*x.getDenom();
+		
+		int numer = x.getSign()*num1 + y.getSign()*num2;
 		int sign = numer > 0 ? 1 : -1;
 		
 		return new Fraction(sign, 0, absValue(numer), denom);
@@ -57,41 +74,44 @@ public class Fraction {
 	public static Fraction subtract(Fraction x, Fraction y) {
 		x = Fraction.toImproperFrac(x);
 		y = Fraction.toImproperFrac(y);	
+		
+		int num1 = x.getNumer()*y.getDenom();
+		int num2 = y.getNumer()*x.getDenom();
 		int denom = x.getDenom()*y.getDenom();
-		int numer = x.getSign()*x.getNumer()*y.getDenom() - y.getSign()*y.getNumer()*x.getDenom();
+		
+		int numer = x.getSign()*num1 - y.getSign()*num2;
 		int sign = numer > 0 ? 1 : -1;
 		
 		return new Fraction(sign, 0, Math.abs(numer), denom);
 	}
 	//multiplies two operands to make a product
 	public static Fraction multiply(Fraction x, Fraction y) {
-		x = toImproperFrac(x);
-		y = toImproperFrac(y);
-		return new Fraction(x.getSign()*y.getSign(), 0, x.getNumer() * y.getNumer(),absValue(x.getDenom() * y.getDenom()));
+		x = toImproperFrac(x); y = toImproperFrac(y);	
+		return new Fraction(x.getSign()*y.getSign(), 0, 
+							x.getNumer() * y.getNumer(),
+							absValue(x.getDenom() * y.getDenom()));
 	}
 	//divides two operands to make a quotient
 	public static Fraction divide(Fraction x, Fraction y) {
-		x = toImproperFrac(x);
-		y = toImproperFrac(y);
-		return new Fraction(x.getSign()*y.getSign(),0, x.getNumer() * y.getDenom(), x.getDenom() * y.getNumer());
+		x = toImproperFrac(x); y = toImproperFrac(y);	
+		return new Fraction(x.getSign()*y.getSign(), 0, 
+							x.getNumer() * y.getDenom(), 
+							x.getDenom() * y.getNumer());
 	}
 
-	//changes mixed number into an improper fraction (static version)
+	//changes mixed number into an improper fraction 
 	public static Fraction toImproperFrac(Fraction x) {
 		return new Fraction(x.getSign(), 0, x.getNumer() + (x.getWhole()*x.getDenom()), absValue(x.getDenom()));
 	}
-	public void toImproperFrac() {
-		this.numer = this.whole * this.denom + this.numer;
-		this.whole = 0;
-		
-	}
 	//simplifies fraction to smallest common values
 	public void toReducedFrac() {
-		this.toImproperFrac();
+		//turns frac into improper so that only two numbers will be used
+		this.numer = whole * denom + numer;
+		this.whole = 0;
 		int gcf = gcf(this.numer,this.denom); 
 
-		this.numer = this.numer / gcf;
-		this.denom = this.denom / gcf;
+		this.numer = numer / gcf;
+		this.denom = denom / gcf;
 	}
 	//turns an improper answer into a mixed number
 	public void toMixedNum() {
@@ -102,17 +122,7 @@ public class Fraction {
 		this.numer = mixedNumer;
 	}
 	
-	//returns the result of the calculation as a string
-	public String toString() {
-		//Decides how much to return based on the Fraction
-		if(this.numer == 0){ 
-			return this.sign*this.whole + "";
-		} else if(this.whole == 0 && this.numer!= 0){ 
-			return this.sign*this.numer+"/"+this.denom;
-		} else {
-			return this.sign*this.whole+"_"+this.numer+"/"+this.denom;
-		}
-	}
+
 	//Accessors
 	public int getSign() {
 		return this.sign;
@@ -130,12 +140,12 @@ public class Fraction {
 	public static int absValue(int num) {
 		int answer = 0;
 		if(num < 0) {
-			answer= -num;//whenever the number is negative, it gets canceled out by the negative in this statement
-			}else answer= num;{//straightforward positive 
+			answer= -num;
+			}else answer= num;{
 			}
 		return answer;
 	}
-	//In the case of FracCalc, gcf can be employed to reduce fractions in operate
+	//gcf reduces fractions in operate
 	public static int gcf(int x, int y) {
 		int gcf = 1;
 		if (x>y) {
